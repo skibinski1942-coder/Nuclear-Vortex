@@ -18,9 +18,12 @@ __description__ = "Advanced AI Assistant Framework"
 
 from achilles.core.engine import AchillesEngine
 from achilles.core.assistant import AchillesAssistant
+from achilles.modules.skills import Skill, SkillRegistry
 
 __all__ = [
     "AchillesEngine",
     "AchillesAssistant",
+    "Skill",
+    "SkillRegistry",
     "__version__",
 ]

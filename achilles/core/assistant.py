@@ -17,6 +17,7 @@ import asyncio
 from achilles.core.engine import AchillesEngine, Task, Priority, TaskStatus
 from achilles.core.memory import MemorySystem
 from achilles.core.reasoning import ReasoningEngine
+from achilles.modules.skills import SkillRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -199,6 +200,13 @@ class AchillesAssistant:
         self.engine = AchillesEngine(self.config.get("engine", {}))
         self.memory = MemorySystem(self.config.get("memory", {}))
         self.reasoning = ReasoningEngine(self.config.get("reasoning", {}))
+
+        # Skills registry — pre-loaded with all built-in skills.
+        # Call load_job_profile() after initialisation to restrict the agent
+        # to a specific role's permitted actions.
+        self.skills = SkillRegistry.with_all_skills(
+            self.config.get("skills", {})
+        )
         
         # AI Provider setup
         if ai_provider:
@@ -600,11 +608,66 @@ You have access to various tools and functions to accomplish tasks. Use them app
                 "active_conversation": self.active_conversation_id,
                 "total_conversations": len(self.conversations),
                 "registered_capabilities": list(self.capabilities.keys()),
+                "registered_skills": [s["skill"] for s in self.skills.list_skills()],
             },
             "engine": self.engine.get_status(),
             "memory": self.memory.get_status(),
             "reasoning": self.reasoning.get_status(),
         }
+
+    # =========================================================================
+    # Skills / Job Profile
+    # =========================================================================
+
+    def load_job_profile(self, profile_data: Dict[str, Any]) -> str:
+        """
+        Configure the assistant for a specific employee role.
+
+        Parses *profile_data* as a ``JobProfile`` and applies it to the skill
+        registry so that only the actions permitted by that role are available.
+
+        Args:
+            profile_data: Job profile dict — see ``JobProfileLoader.from_dict``
+                          for the expected schema.
+
+        Returns:
+            A human-readable summary of the loaded profile.
+        """
+        from achilles.modules.skills.job_profile import JobProfileLoader
+
+        profile = JobProfileLoader.from_dict(profile_data)
+        self.skills.apply_job_profile(profile)
+        logger.info("Job profile loaded: %s", profile.title)
+        return profile.summary()
+
+    async def use_skill(
+        self,
+        skill_name: str,
+        action: str,
+        params: Optional[Dict[str, Any]] = None,
+    ) -> Any:
+        """
+        Execute a skill action through the registry.
+
+        This is a convenience wrapper that delegates to ``self.skills.execute``
+        and logs the invocation.
+
+        Args:
+            skill_name: Registry key of the target skill.
+            action:     Action to invoke within that skill.
+            params:     Parameters forwarded to the action.
+
+        Returns:
+            The action result.
+        """
+        logger.info("Using skill '%s' action '%s'", skill_name, action)
+        result = await self.skills.execute(skill_name, action, params)
+        self.memory.add_interaction(
+            f"skill:{skill_name}.{action}",
+            str(result),
+            {"skill": skill_name, "action": action},
+        )
+        return result
     
     def export_state(self) -> Dict[str, Any]:
         """Export complete assistant state."""
