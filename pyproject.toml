@@ -60,10 +60,14 @@ ai = [
     "anthropic>=0.18.0",
     "transformers>=4.30.0",
 ]
+xrpl = [
+    "aiohttp>=3.8.0",
+]
 all = [
     "achilles-ai[dev]",
     "achilles-ai[research]",
     "achilles-ai[ai]",
+    "achilles-ai[xrpl]",
 ]
 
 [project.urls]
