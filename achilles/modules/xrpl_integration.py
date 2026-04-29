@@ -148,10 +148,10 @@ class XRPLIntegration:
         # aiohttp sessions – created lazily
         self._http_session: Optional[aiohttp.ClientSession] = None
         self._ws: Optional[aiohttp.ClientWebSocketResponse] = None
-        self._ws_listener_task: Optional[asyncio.Task] = None  # type: ignore[type-arg]
+        self._ws_listener_task: Optional[asyncio.Task[None]] = None
 
         # Pending WebSocket requests keyed by request id
-        self._pending: Dict[str, asyncio.Future] = {}  # type: ignore[type-arg]
+        self._pending: Dict[str, "asyncio.Future[Dict[str, Any]]"] = {}
 
         # Active subscriptions
         self._subscriptions: Dict[str, XRPLSubscription] = {}
@@ -421,7 +421,7 @@ class XRPLIntegration:
             payload.update(params)
 
         loop = asyncio.get_event_loop()
-        fut: asyncio.Future = loop.create_future()  # type: ignore[type-arg]
+        fut: "asyncio.Future[Dict[str, Any]]" = loop.create_future()
         self._pending[request_id] = fut
 
         try:
