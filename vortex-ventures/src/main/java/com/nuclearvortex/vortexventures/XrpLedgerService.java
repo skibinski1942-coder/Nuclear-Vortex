@@ -185,18 +185,26 @@ public final class XrpLedgerService {
                     transaction.getAmountDrops(), largeTransactionThresholdDrops));
         }
 
-        // 7. Daily limit per sender
-        long currentDailyTotal = dailySentDrops.getOrDefault(transaction.getSenderAddress(), 0L);
-        long newDailyTotal = currentDailyTotal + transaction.getAmountDrops();
-        if (newDailyTotal > maxDailyDropsPerSender) {
+        // 7. Daily limit per sender — checked and updated atomically to prevent race conditions
+        boolean[] limitExceeded = {false};
+        long[]    newTotalRef   = {0};
+        dailySentDrops.compute(transaction.getSenderAddress(), (addr, current) -> {
+            long cur      = (current == null) ? 0L : current;
+            long newTotal = cur + transaction.getAmountDrops();
+            if (newTotal > maxDailyDropsPerSender) {
+                limitExceeded[0] = true;
+                newTotalRef[0]   = newTotal;
+                return cur;   // leave the stored total unchanged
+            }
+            newTotalRef[0] = newTotal;
+            return newTotal;
+        });
+        if (limitExceeded[0]) {
             return reject(String.format(
                     "Transaction would bring sender's daily total to %d drops, "
                     + "exceeding the daily limit of %d drops",
-                    newDailyTotal, maxDailyDropsPerSender));
+                    newTotalRef[0], maxDailyDropsPerSender));
         }
-
-        // All checks passed — approve and record daily total
-        dailySentDrops.put(transaction.getSenderAddress(), newDailyTotal);
         return approve(String.format(
                 "Transaction approved: %d drops from %s to %s",
                 transaction.getAmountDrops(),

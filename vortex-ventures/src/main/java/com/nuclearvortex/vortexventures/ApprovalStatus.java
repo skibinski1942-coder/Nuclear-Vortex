@@ -14,7 +14,7 @@ package com.nuclearvortex.vortexventures;
  */
 public enum ApprovalStatus {
 
-    /** Transaction is valid and authorised. */
+    /** Transaction is valid and authorized. */
     APPROVED,
 
     /** Transaction has been declined due to a policy or validation failure. */
