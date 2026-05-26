@@ -1,9 +1,9 @@
-# Nuclear-Vortex
+# Vortex
 A brand that leads in the world of confused with clarity
 
 ---
 
-# AUGUSTUS — Elite Software Engineering & AI Reference Guide
+## AUGUSTUS — Elite Software Engineering & AI Reference Guide
 
 > **Purpose:** Operate at the highest level across software engineering, AI/ML, and data engineering — a personal reference for mastering the tools, frameworks, and practices that define world-class technical work.
 
@@ -63,7 +63,7 @@ A brand that leads in the world of confused with clarity
 ## 2. System Design & Architecture
 
 ### Distributed Systems Fundamentals
-- **CAP Theorem:** Consistency, Availability, Partition Tolerance — pick two
+- **CAP Theorem:** When a network partition occurs, distributed systems must trade off consistency vs availability
 - **BASE vs ACID:** Eventually consistent (NoSQL) vs strictly transactional (RDBMS)
 - **Consensus Algorithms:** Raft, Paxos — used in etcd, ZooKeeper, Kafka controller
 
@@ -222,7 +222,7 @@ Traces   → distributed tracing (Jaeger, Zipkin, OpenTelemetry)
 ## 6. Security Engineering
 
 ### Secure Coding
-- **OWASP Top 10:** Injection, Broken Auth, XSS, IDOR, Security Misconfiguration, etc.
+- **OWASP Top 10:** Injection, Broken Access Control, Identification and Authentication Failures, Security Misconfiguration, etc.
 - **Input Validation & Output Encoding** — never trust external input
 - **Parameterised Queries / Prepared Statements** — prevent SQL injection
 - **Secrets Management:** HashiCorp Vault, AWS Secrets Manager, never commit secrets to git
