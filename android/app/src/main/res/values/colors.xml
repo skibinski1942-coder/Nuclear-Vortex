@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand -->
+    <color name="purple_primary">#6200EE</color>
+    <color name="purple_primary_dark">#3700B3</color>
+    <color name="purple_secondary">#03DAC5</color>
+
+    <!-- UI -->
+    <color name="white">#FFFFFF</color>
+    <color name="chat_background">#F5F5F5</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+
+    <!-- Message bubbles -->
+    <color name="bubble_user_bg">#6200EE</color>
+    <color name="bubble_achilles_bg">#FFFFFF</color>
+</resources>

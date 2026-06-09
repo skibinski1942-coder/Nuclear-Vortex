@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Achilles AI</string>
+    <string name="tagline">Intelligent. Efficient. Ethical.</string>
+
+    <!-- Main screen -->
+    <string name="feature_chat_title">🧠 Intelligent Chat</string>
+    <string name="feature_chat_desc">Talk to Achilles naturally — ask questions, get answers, delegate tasks.</string>
+    <string name="feature_research_title">📚 Research Platform</string>
+    <string name="feature_research_desc">Search academic papers (arXiv, PubMed), patents, government data, and more.</string>
+    <string name="feature_tasks_title">⚡ Workflow Automation</string>
+    <string name="feature_tasks_desc">Create and run automated workflows triggered by events, schedules, or your own commands.</string>
+    <string name="button_start_chat">Start Chatting</string>
+
+    <!-- Chat screen -->
+    <string name="chat_title">Achilles</string>
+    <string name="hint_message">Message Achilles…</string>
+    <string name="send_button_desc">Send message</string>
+    <string name="achilles_welcome">Hello! I\'m Achilles, your intelligent AI assistant. How can I help you today?</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="pref_server_url_title">Server URL</string>
+    <string name="pref_server_url_summary">The URL of your Achilles backend server</string>
+    <string name="default_server_url">http://localhost:8000</string>
+
+    <!-- Errors -->
+    <string name="error_empty_response">Achilles returned an empty response. Please try again.</string>
+    <string name="error_server">Server error (code %d). Please try again later.</string>
+    <string name="error_connection">Could not reach the Achilles server. Check the server URL in Settings.</string>
+</resources>
